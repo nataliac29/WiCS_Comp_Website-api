@@ -9,13 +9,61 @@ scalar Time
 scalar EmailAddress
 scalar PhoneNumber
 
-type Query {
+  type Query {
     user(id: ID!): User!
+    userEvents: [Event!]
+    events: [Event!]
+    viewer: User!
+    userTrackEvents: [TrackEvent!]
   }
 
   type Mutation {
-    login(email: EmailAddress!, password: String!): Viewer!
+    login(email: EmailAddress!, password: String!): AuthReturn!
     register(input: RegisterInput!): Viewer!
+    addTrackEvents(input: AddTrackEventsInput!): Event!
+    addEvents(input: AddEventsInput!): Event!
+  }
+
+  type Event {
+    id: ID!
+    eventname: String!
+    type: EventTypeEnum!
+    datetime: DateTime!
+    des: String!
+    createdAt: DateTime!
+  }
+
+   enum EventTypeEnum {
+    SmallSocial
+    LargeSocial
+    Educational
+    Sponsorship
+  }
+
+  type TrackEvent {
+    id: ID!
+    userId: ID!
+    eventId: ID!
+    photo: String
+    des: String
+    addedAt: DateTime!
+  }
+  
+  input AddTrackEventsInput {
+    userId: ID!
+    eventId: ID!
+    photo: String
+    des: String
+    addedAt: DateTime!
+  }
+  
+  input AddEventsInput {
+    id: ID!
+    eventname: String!
+    type: EventTypeEnum!
+    datetime: DateTime!
+    des: String!
+    createdAt: DateTime!
   }
 
   interface UserTraits {
@@ -30,6 +78,9 @@ type Query {
     email: EmailAddress!
     createdAt: DateTime!
     updatedAt: DateTime!
+    firstName: String!
+    lastName: String!
+    year: String!
   }
 
   type Viewer implements UserTraits {
@@ -37,6 +88,9 @@ type Query {
     email: EmailAddress!
     createdAt: DateTime!
     updatedAt: DateTime!
+    firstName: String!
+    lastName: String!
+    year: String!
   }
 
   type AuthReturn {
@@ -47,5 +101,8 @@ type Query {
   input RegisterInput {
     email: EmailAddress!
     password: String!
+    firstName: String!
+    lastName: String!
+    year: String
   }
 `

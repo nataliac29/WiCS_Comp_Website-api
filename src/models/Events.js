@@ -1,24 +1,24 @@
-const { BelongsToOneRelation } = require('objection')
+const { BelongToOneRelation } = require('objection')
 const BaseModel = require('./BaseModel')
 
-class User extends BaseModel {
+class Events extends BaseModel {
   static get tableName() {
-    return 'users'
+    return 'events'
   }
 
   static get relationMappings() {
     const TrackEvents = require('./TrackEvents')
     return {
       trackevents: {
-        relation: BelongsToOneRelation,
+        relation: BelongToOneRelation,
         modelClass: TrackEvents,
         join: {
-          from: 'users.id',
-          to: 'trackevents.userId',
+          from: 'events.id',
+          to: 'trackevents.eventId',
         },
       },
     }
   }
 }
 
-module.exports = User
+module.exports = Events

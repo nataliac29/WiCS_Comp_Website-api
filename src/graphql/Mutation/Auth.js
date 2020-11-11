@@ -26,10 +26,14 @@ const login = async (obj, { email, password }, { res }) => {
   const token = createToken(payload)
   res.set('x-token', token)
 
-  return user
+  return { token, user }
 }
 
-const register = async (obj, { input: { email, password } }, { res }) => {
+const register = async (obj, {
+  input: {
+    email, password, firstName, lastName, year,
+  },
+}, { res }) => {
   const passwordHash = await hashPassword(password)
   const emailExists = await User.query().findOne({ email })
   if (emailExists) {
@@ -39,6 +43,9 @@ const register = async (obj, { input: { email, password } }, { res }) => {
   const user = await User.query().insertAndFetch({
     email,
     password: passwordHash,
+    firstName,
+    lastName,
+    year,
   })
 
   // If successful registration, set authentication information
