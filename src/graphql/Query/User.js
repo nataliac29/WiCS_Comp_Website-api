@@ -1,14 +1,7 @@
 const User = require('../../models/User')
 
 
-const viewer = async (obj, args, { user }) => {
-  try {
-    if (user) return user
-  } catch (err) {
-    throw new Error('Please Login')
-  }
-}
-
+const viewer = async (obj, args, { user }) => user
 const user = async (obj, { id }) => {
   try {
     const e = await User.query().findById(id)
