@@ -16,8 +16,11 @@ module.exports = shield({
     '*': allow,
   },
   Mutation: {
-    login: allow,
-    register: allow,
+    userLogin: allow,
+    userRegister: allow,
+    adminLogin: allow,
+    adminRegister: allow,
+    changeTrackEventStatus: allow,
     '*': allow,
   },
 }, {

@@ -13,16 +13,25 @@ scalar PhoneNumber
     user(id: ID!): User!
     userEvents: [Event!]
     events: [Event!]
-    viewer: User!
+    userViewer: User!
+    adminViewer: Admin!
     userTrackEvents: [TrackEvent!]
+    getUserById(id: ID!): User!
+    getAdminById(id: String!): Admin!
+    allTrackEvents: [TrackEvent!]
+    allUsers: [User!]!
   }
 
   type Mutation {
-    login(email: EmailAddress!, password: String!): AuthReturn!
-    register(input: RegisterInput!): Viewer!
+    userLogin(email: EmailAddress!, password: String!): AuthReturn!
+    adminLogin(email: EmailAddress!, password: String!): AuthReturn!
+    userRegister(input: RegisterInput!): User!
+    adminRegister(input: RegisterInput!): Admin!
     addTrackEvents(input: AddTrackEventsInput!): Event!
     addEvents(input: AddEventsInput!): Event!
-  }
+    changeTrackEventStatus(input: ChangeTrackInput!): TrackEvent!
+}
+
 
   type Event {
     id: ID!
@@ -46,6 +55,7 @@ scalar PhoneNumber
     eventId: ID!
     photo: String
     des: String
+    approved: Boolean!
     addedAt: DateTime!
   }
   
@@ -55,6 +65,10 @@ scalar PhoneNumber
     photo: String
     des: String
     addedAt: DateTime!
+  }
+  input ChangeTrackInput {
+    eventId: String!
+    status: Boolean!
   }
   
   input AddEventsInput {
@@ -76,11 +90,21 @@ scalar PhoneNumber
   type User implements UserTraits {
     id: ID!
     email: EmailAddress!
+    password: String!
     createdAt: DateTime!
     updatedAt: DateTime!
     firstName: String!
     lastName: String!
     year: String!
+  }
+    type Admin implements UserTraits {
+    id: ID!
+    email: EmailAddress!
+    password: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    firstName: String!
+    lastName: String!
   }
 
   type Viewer implements UserTraits {
@@ -88,14 +112,11 @@ scalar PhoneNumber
     email: EmailAddress!
     createdAt: DateTime!
     updatedAt: DateTime!
-    firstName: String!
-    lastName: String!
-    year: String!
   }
 
   type AuthReturn {
     token: String!
-    user: User!
+    user: Viewer!
   }
 
   input RegisterInput {

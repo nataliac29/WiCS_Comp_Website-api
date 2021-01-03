@@ -17,9 +17,22 @@ const addTrackEvents = async (obj, { input }, { user }) => {
   return newTrackEvent
 }
 
+const changeTrackEventStatus = async (_obj, { input }) => {
+  const {
+    eventId, status,
+  } = input
+  const updateObj = { approved: status }
+
+  const updatedTrackEvent = await TrackEvents.query()
+    .findById(eventId)
+    .patch(updateObj).returning('*')
+  return updatedTrackEvent
+}
+
 const resolver = {
   Mutation: {
     addTrackEvents,
+    changeTrackEventStatus,
   },
 }
 

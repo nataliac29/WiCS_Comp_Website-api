@@ -1,8 +1,8 @@
 const User = require('../../models/User')
 
 
-const viewer = async (obj, args, { user }) => user
-const user = async (obj, { id }) => {
+const userViewer = async (obj, args, { user }) => user
+const getUserById = async (obj, { id }) => {
   try {
     const e = await User.query().findById(id)
     return e
@@ -11,6 +11,10 @@ const user = async (obj, { id }) => {
   }
 }
 
+const allUsers = async () => {
+  const users = User.query()
+  return users
+}
 
 // Suppose that user is a subresolver to a table/object. The following code shows how
 // the userLoader from the context can be used to load the users all at once where id is
@@ -26,8 +30,9 @@ const resolver = {
     __resolveType: () => null,
   },
   Query: {
-    user,
-    viewer,
+    userViewer,
+    getUserById,
+    allUsers,
   },
 }
 

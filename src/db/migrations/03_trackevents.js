@@ -23,6 +23,11 @@ exports.up = async knex => createTableIfNotExists(knex, 'trackevents', table => 
   table
     .text('des')
 
+  table
+    .boolean('approved')
+    .notNullable()
+    .defaultTo(false)
+
   table.timestamp('addedAt').defaultTo(knex.fn.now())
 })
 exports.down = async knex => knex.schema.dropTableIfExists('trackevents')

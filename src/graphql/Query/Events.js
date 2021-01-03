@@ -29,6 +29,10 @@ const userTrackEvents = async (obj, args, { user }) => {
     throw new Error('Failed to fetch user')
   }
 }
+const allTrackEvents = async () => {
+  const trackEvents = await TrackEvents.query()
+  return trackEvents
+}
 
 
 const resolver = {
@@ -36,6 +40,7 @@ const resolver = {
     userEvents,
     events,
     userTrackEvents,
+    allTrackEvents,
   },
 }
 

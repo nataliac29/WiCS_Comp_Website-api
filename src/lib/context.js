@@ -1,6 +1,7 @@
 const { isSameHour } = require('date-fns')
 const { createToken, decodeToken } = require('./auth')
 const User = require('../models/User')
+const Admin = require('../models/Admin')
 const { generateLoaders } = require('./dataloader')
 
 // The method exported here sets the context for all resolvers and refreshes tokens
@@ -18,25 +19,41 @@ module.exports = async ({ req, res }) => {
     // No JWT present for auth
     return context
   }
-
   try {
     const {
-      sub, iat,
+      sub, iat, iss,
     } = decodeToken(jwt)
-
-    const user = await User.query().findById(sub)
-    context.user = user
-    if (isSameHour(iat, new Date().getTime() / 1000)) {
-      return context
+    let user = {}
+    switch (iss) {
+      case 'USER':
+        user = await User.query().findById(sub)
+        context.user = user
+        if (isSameHour(iat, new Date().getTime() / 1000)) {
+          return context
+        }
+        // If token is more than an hour old, refresh it
+        res.set('x-token', createToken({
+          sub: user.id,
+          iss,
+        }))
+        return context
+      case 'ADMIN':
+        user = await Admin.query().findById(sub)
+        context.admin = user
+        if (isSameHour(iat, new Date().getTime() / 1000)) {
+          return context
+        }
+        // If token is more than an hour old, refresh it
+        res.set('x-token', createToken({
+          sub: user.id,
+          iss,
+        }))
+        return context
+      default:
+        return context
     }
 
-    // If token is more than an hour old, refresh it
-    const payload = {
-      sub: user.id,
-    }
-    res.set('x-token', createToken(payload))
 
-    return context
     // If failed context creation, make unathenticated request
   } catch (error) {
     return context
