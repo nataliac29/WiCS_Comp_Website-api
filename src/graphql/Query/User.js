@@ -10,6 +10,15 @@ const getUserById = async (obj, { id }) => {
     throw new Error('Failed to fetch user')
   }
 }
+const getUsersByYear = async (_obj, { year }) => User.query().where('year', year)
+
+const getUsersByName = async (_obj, { name }) => {
+  const splitted = name.split(' ')
+  if (splitted.length > 1) {
+    return User.query().where('firstName', 'in', splitted).orWhere('lastName', 'in', splitted)
+  }
+  return User.query().where('firstName', 'like', `%${name}%`).orWhere('lastName', 'like', `%${name}%`)
+}
 
 const allUsers = async () => {
   const users = User.query()
@@ -33,6 +42,8 @@ const resolver = {
     userViewer,
     getUserById,
     allUsers,
+    getUsersByYear,
+    getUsersByName,
   },
 }
 

@@ -18,8 +18,16 @@ scalar PhoneNumber
     userTrackEvents: [TrackEvent!]
     getUserById(id: ID!): User!
     getAdminById(id: String!): Admin!
+
+    #all submissions
     allTrackEvents: [TrackEvent!]
     allUsers: [User!]!
+
+    #filter compers by year
+    getUsersByYear(year: String!): [User!]!
+
+    #filter by any search
+    getUsersByName(name: String!): [User]
   }
 
   type Mutation {
