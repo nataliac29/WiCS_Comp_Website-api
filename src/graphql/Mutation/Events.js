@@ -116,9 +116,14 @@ const addTrackEvents = async (obj, { input }, { user }) => {
 
 const changeTrackEventStatus = async (_obj, { input }) => {
   const {
-    eventId, status,
+    eventId, status, userId
   } = input
   const updateObj = { approved: status }
+
+  const updateProgress = await TrackEvents.query()
+    .where('userId', userId)
+
+  console.log(updateProgress.filter(el => el.type))
 
   // fs.readFile('credentials.json', (err, content) => {
   //   // if (err) return console.log('Error loading client secret file:', err)

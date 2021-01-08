@@ -76,8 +76,9 @@ scalar PhoneNumber
     addedAt: DateTime!
   }
   input ChangeTrackInput {
-    eventId: String!
+    eventId: ID!
     status: Boolean!
+    userId: ID!
   }
   
   input AddEventsInput {
@@ -105,6 +106,7 @@ scalar PhoneNumber
     firstName: String!
     lastName: String!
     year: String!
+    progress: Float!
   }
     type Admin implements UserTraits {
     id: ID!
