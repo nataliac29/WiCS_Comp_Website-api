@@ -38,6 +38,7 @@ scalar PhoneNumber
     addTrackEvents(input: AddTrackEventsInput!): Event!
     addEvents(input: AddEventsInput!): Event!
     changeTrackEventStatus(input: ChangeTrackInput!): TrackEvent!
+    editAdmin(input: EditAdminInput!): Admin!
 }
 
 
@@ -133,5 +134,11 @@ scalar PhoneNumber
     firstName: String!
     lastName: String!
     year: String
+  }
+  input EditAdminInput {
+    email: EmailAddress
+    password: String
+    firstName: String
+    lastName: String
   }
 `
