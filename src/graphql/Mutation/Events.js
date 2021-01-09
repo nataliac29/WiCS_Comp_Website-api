@@ -7,6 +7,8 @@
 // const { google } = require('googleapis')
 const TrackEvents = require('../../models/TrackEvents')
 
+// const Events = require('../../models/Events')
+
 // // If modifying these scopes, delete token.json.
 // const SCOPES = [
 //   'https://www.googleapis.com/auth/drive.metadata.readonly',
@@ -113,6 +115,12 @@ const addTrackEvents = async (obj, { input }, { user }) => {
   })
   return newTrackEvent
 }
+// const batchEvents = async ids => {
+//   const events = await Events.query()
+//     .whereIn('id', ids).select()
+
+//   return events
+// }
 
 const changeTrackEventStatus = async (_obj, { input }) => {
   const {
@@ -122,6 +130,14 @@ const changeTrackEventStatus = async (_obj, { input }) => {
 
   // const updateProgress = await TrackEvents.query()
   //   .where('userId', userId)
+  // const eventIds = updateProgress.map(el => el.eventId)
+
+  // const events = await batchEvents(eventIds)
+  // // const SmallSocial = events.filter(el => el.type === 'SmallSocial').length
+  // // const LargeSocial = events.filter(el => el.type === 'LargeSocial').length
+  // // const Sponsorship = events.filter(el => el.type === 'Sponsorship').length
+  // // const Educational = events.filter(el => el.type === 'Educational').length
+
 
   // console.log(updateProgress.filter(el => el.type))
 
