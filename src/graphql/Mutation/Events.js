@@ -6,6 +6,7 @@
 // const readline = require('readline')
 // const { google } = require('googleapis')
 const TrackEvents = require('../../models/TrackEvents')
+const User = require('../../models/User')
 
 // const Events = require('../../models/Events')
 
@@ -128,16 +129,42 @@ const changeTrackEventStatus = async (_obj, { input }) => {
   } = input
   const updateObj = { approved: status }
 
-  // const updateProgress = await TrackEvents.query()
-  //   .where('userId', userId)
-  // const eventIds = updateProgress.map(el => el.eventId)
+  const updatedTrackEvent = await TrackEvents.query()
+    .findById(eventId)
+    .patch(updateObj).returning('*')
 
-  // const events = await batchEvents(eventIds)
-  // // const SmallSocial = events.filter(el => el.type === 'SmallSocial').length
-  // // const LargeSocial = events.filter(el => el.type === 'LargeSocial').length
-  // // const Sponsorship = events.filter(el => el.type === 'Sponsorship').length
-  // // const Educational = events.filter(el => el.type === 'Educational').length
+  const currEvents = await TrackEvents.query()
+    .where('userId', userId).whereNot('approved', false)
+  const eventIds = currEvents.map(el => el.eventId)
 
+  const events = await batchEvents(eventIds)
+  const SmallSocial = events.filter(el => el.type === 'SmallSocial').length
+  const LargeSocial = events.filter(el => el.type === 'LargeSocial').length
+  const Sponsorship = events.filter(el => el.type === 'Sponsorship').length
+  const Educational = events.filter(el => el.type === 'Educational').length
+
+  const currProg = 0
+
+  if (SmallSocial >= 1) {
+    currProg++
+    SmallSocial--
+  }
+  else if (LargeSocial >= 1) {
+    currProg++
+    LargeSocial--
+  }
+  else if (Sponsorship >= 1) {
+    currProg++
+    Sponsorship--
+  }
+  else if (Educational >= 1) {
+    currProg++
+    Educational--
+  }
+
+  currProg += (SmallSocial + LargeSocial + Sponsorship + Educational >= 2) ? 2 : (SmallSocial + LargeSocial + Sponsorship + Educational)
+
+  User.query().findById(userId).patch({ progress: currProg })
 
   // console.log(updateProgress.filter(el => el.type))
 
@@ -147,9 +174,7 @@ const changeTrackEventStatus = async (_obj, { input }) => {
   //   authorize(JSON.parse(content), runSample)
   // })
 
-  const updatedTrackEvent = await TrackEvents.query()
-    .findById(eventId)
-    .patch(updateObj).returning('*')
+
   return updatedTrackEvent
 }
 
