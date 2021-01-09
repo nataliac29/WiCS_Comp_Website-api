@@ -7,8 +7,7 @@
 // const { google } = require('googleapis')
 const TrackEvents = require('../../models/TrackEvents')
 const User = require('../../models/User')
-
-// const Events = require('../../models/Events')
+const Events = require('../../models/Events')
 
 // // If modifying these scopes, delete token.json.
 // const SCOPES = [
@@ -116,16 +115,16 @@ const addTrackEvents = async (obj, { input }, { user }) => {
   })
   return newTrackEvent
 }
-// const batchEvents = async ids => {
-//   const events = await Events.query()
-//     .whereIn('id', ids).select()
+const batchEvents = async ids => {
+  const events = await Events.query()
+    .whereIn('id', ids).select()
 
-//   return events
-// }
+  return events
+}
 
 const changeTrackEventStatus = async (_obj, { input }) => {
   const {
-    eventId, status, // userId,
+    eventId, status, userId,
   } = input
   const updateObj = { approved: status }
 
@@ -138,31 +137,29 @@ const changeTrackEventStatus = async (_obj, { input }) => {
   const eventIds = currEvents.map(el => el.eventId)
 
   const events = await batchEvents(eventIds)
-  const SmallSocial = events.filter(el => el.type === 'SmallSocial').length
-  const LargeSocial = events.filter(el => el.type === 'LargeSocial').length
-  const Sponsorship = events.filter(el => el.type === 'Sponsorship').length
-  const Educational = events.filter(el => el.type === 'Educational').length
+  let SmallSocial = events.filter(el => el.type === 'SmallSocial').length
+  let LargeSocial = events.filter(el => el.type === 'LargeSocial').length
+  let Sponsorship = events.filter(el => el.type === 'Sponsorship').length
+  let Educational = events.filter(el => el.type === 'Educational').length
 
-  const currProg = 0
+  let currProg = 0
 
   if (SmallSocial >= 1) {
     currProg++
     SmallSocial--
-  }
-  else if (LargeSocial >= 1) {
+  } else if (LargeSocial >= 1) {
     currProg++
     LargeSocial--
-  }
-  else if (Sponsorship >= 1) {
+  } else if (Sponsorship >= 1) {
     currProg++
     Sponsorship--
-  }
-  else if (Educational >= 1) {
+  } else if (Educational >= 1) {
     currProg++
     Educational--
   }
 
-  currProg += (SmallSocial + LargeSocial + Sponsorship + Educational >= 2) ? 2 : (SmallSocial + LargeSocial + Sponsorship + Educational)
+  currProg += (SmallSocial + LargeSocial + Sponsorship + Educational >= 2)
+    ? 2 : (SmallSocial + LargeSocial + Sponsorship + Educational)
 
   User.query().findById(userId).patch({ progress: currProg })
 
