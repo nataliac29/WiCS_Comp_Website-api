@@ -24,9 +24,9 @@ exports.up = async knex => createTableIfNotExists(knex, 'trackevents', table => 
     .text('des')
 
   table
-    .boolean('approved')
+    .string('approved')
     .notNullable()
-    .defaultTo(false)
+    .defaultTo('pending')
 
   table.timestamp('addedAt').defaultTo(knex.fn.now())
 })
