@@ -61,10 +61,10 @@ scalar PhoneNumber
   type TrackEvent {
     id: ID!
     userId: ID!
-    eventId: ID!
+    event: ID!
     photo: String
     des: String
-    approved: Boolean!
+    approved: String!
     addedAt: DateTime!
   }
   
@@ -77,7 +77,7 @@ scalar PhoneNumber
   }
   input ChangeTrackInput {
     eventId: ID!
-    status: Boolean!
+    status: String!
     userId: ID!
   }
   

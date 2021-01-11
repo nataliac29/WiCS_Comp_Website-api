@@ -1,7 +1,9 @@
+/* eslint-disable max-len */
 // const User = require('../../models/User')
 const Events = require('../../models/Events')
 const TrackEvents = require('../../models/TrackEvents')
 
+// const event = async ({ eventId: e }, _params, { loaders: { eventLoader } }) => eventLoader.load(e)
 const userEvents = async (obj, args, { user }) => {
   try {
     const e = await TrackEvents.query().select('eventId').where('userId', (user.id))
