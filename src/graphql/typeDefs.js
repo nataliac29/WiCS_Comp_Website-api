@@ -61,7 +61,7 @@ scalar PhoneNumber
   type TrackEvent {
     id: ID!
     userId: ID!
-    event: ID!
+    eventId: ID!
     photo: String
     des: String
     approved: String!
