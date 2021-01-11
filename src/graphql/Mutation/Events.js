@@ -133,7 +133,7 @@ const changeTrackEventStatus = async (_obj, { input }) => {
     .patch(updateObj).returning('*')
 
   const currEvents = await TrackEvents.query()
-    .where('userId', userId).whereNot('approved', 'false')
+    .where('userId', userId).whereNot('approved', 'false').whereNot('approved', 'pending')
   const eventIds = currEvents.map(el => el.eventId)
 
   const events = await batchEvents(eventIds)
