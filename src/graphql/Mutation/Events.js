@@ -6,6 +6,8 @@
 // const readline = require('readline')
 // const { google } = require('googleapis')
 const TrackEvents = require('../../models/TrackEvents')
+const User = require('../../models/User')
+const Events = require('../../models/Events')
 
 // // If modifying these scopes, delete token.json.
 // const SCOPES = [
@@ -113,12 +115,55 @@ const addTrackEvents = async (obj, { input }, { user }) => {
   })
   return newTrackEvent
 }
+const batchEvents = async ids => {
+  const events = await Events.query()
+    .whereIn('id', ids).select()
+
+  return events
+}
 
 const changeTrackEventStatus = async (_obj, { input }) => {
   const {
-    eventId, status,
+    eventId, status, userId,
   } = input
   const updateObj = { approved: status }
+
+  const updatedTrackEvent = await TrackEvents.query()
+    .findById(eventId)
+    .patch(updateObj).returning('*')
+
+  const currEvents = await TrackEvents.query()
+    .where('userId', userId).whereNot('approved', false)
+  const eventIds = currEvents.map(el => el.eventId)
+
+  const events = await batchEvents(eventIds)
+  let SmallSocial = events.filter(el => el.type === 'SmallSocial').length
+  let LargeSocial = events.filter(el => el.type === 'LargeSocial').length
+  let Sponsorship = events.filter(el => el.type === 'Sponsorship').length
+  let Educational = events.filter(el => el.type === 'Educational').length
+
+  let currProg = 0
+
+  if (SmallSocial >= 1) {
+    currProg++
+    SmallSocial--
+  } else if (LargeSocial >= 1) {
+    currProg++
+    LargeSocial--
+  } else if (Sponsorship >= 1) {
+    currProg++
+    Sponsorship--
+  } else if (Educational >= 1) {
+    currProg++
+    Educational--
+  }
+
+  currProg += (SmallSocial + LargeSocial + Sponsorship + Educational >= 2)
+    ? 2 : (SmallSocial + LargeSocial + Sponsorship + Educational)
+
+  User.query().findById(userId).patch({ progress: currProg })
+
+  // console.log(updateProgress.filter(el => el.type))
 
   // fs.readFile('credentials.json', (err, content) => {
   //   // if (err) return console.log('Error loading client secret file:', err)
@@ -126,9 +171,7 @@ const changeTrackEventStatus = async (_obj, { input }) => {
   //   authorize(JSON.parse(content), runSample)
   // })
 
-  const updatedTrackEvent = await TrackEvents.query()
-    .findById(eventId)
-    .patch(updateObj).returning('*')
+
   return updatedTrackEvent
 }
 

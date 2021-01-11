@@ -9,6 +9,7 @@ casual.define('user', () => ({
   lastName: casual.last_name,
   year: casual.year,
   email: casual.email,
+  progress: casual.double(from = 0, to = 100),
   password,
   createdAt: casual.moment,
   updatedAt: casual.moment,
