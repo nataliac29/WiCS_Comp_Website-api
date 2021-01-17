@@ -41,7 +41,7 @@ scalar PhoneNumber
     changeTrackEventStatus(input: ChangeTrackInput!): TrackEvent!
     editAdmin(input: EditAdminInput!): Admin!
     editEvent(input: EditEventInput!): Event!
-}
+    removeEvents(events: [ID!]!): Boolean!}
 
 
   type Event {

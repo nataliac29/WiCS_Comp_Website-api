@@ -214,6 +214,14 @@ const changeTrackEventStatus = async (_obj, { input }) => {
 
   return updatedTrackEvent
 }
+const removeEvents = async (_obj, { events }) => {
+  try {
+    const del = await Events.query().delete().whereIn('id', events)
+    return events.length === del
+  } catch (error) {
+    throw new Error('Unable to delete events')
+  }
+}
 
 const resolver = {
   Mutation: {
@@ -221,6 +229,7 @@ const resolver = {
     changeTrackEventStatus,
     addEvents,
     editEvent,
+    removeEvents,
   },
 }
 
