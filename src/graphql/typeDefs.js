@@ -87,7 +87,7 @@ scalar PhoneNumber
     id: ID!
     eventname: String
     des: String
-    addedAt: DateTime
+    datetime: DateTime
     type: EventTypeEnum
   }
 
