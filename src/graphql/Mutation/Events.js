@@ -115,6 +115,46 @@ const addTrackEvents = async (obj, { input }, { user }) => {
   })
   return newTrackEvent
 }
+const addEvents = async (obj, { input }) => {
+  const {
+    eventname, des, datetime, type,
+  } = input
+
+  const newEvent = await Events.query().insertAndFetch({
+    eventname,
+    datetime,
+    des,
+    type,
+  })
+  return newEvent
+}
+
+const editEvent = async (obj, { input }) => {
+  const {
+    id, eventname, datetime, des, type,
+  } = input
+  const updateObj = { id }
+
+  if (eventname) { updateObj.eventname = eventname }
+  if (datetime) { updateObj.datetime = datetime }
+
+  if (des) {
+    updateObj.password = des
+  }
+
+  if (type) {
+    if (type !== ('SmallSocial' || 'LargeSocial' || 'Sponsorship' || 'Educational')) {
+      throw new Error('Please add correct type')
+    } else {
+      updateObj.type = type
+    }
+  }
+
+  const updatedEvent = await Events.query()
+    .findById(id)
+    .patch(updateObj).returning('*')
+  return updatedEvent
+}
 const batchEvents = async ids => {
   const events = await Events.query()
     .whereIn('id', ids).select()
@@ -179,6 +219,8 @@ const resolver = {
   Mutation: {
     addTrackEvents,
     changeTrackEventStatus,
+    addEvents,
+    editEvent,
   },
 }
 

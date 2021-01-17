@@ -18,6 +18,7 @@ scalar PhoneNumber
     userTrackEvents: [TrackEvent!]
     getUserById(id: ID!): User!
     getAdminById(id: String!): Admin!
+    getEventsByDate(startDate: Date!, timeFrame: Duration!): [Event!]
 
     #all submissions
     allTrackEvents: [TrackEvent!]
@@ -39,6 +40,7 @@ scalar PhoneNumber
     addEvents(input: AddEventsInput!): Event!
     changeTrackEventStatus(input: ChangeTrackInput!): TrackEvent!
     editAdmin(input: EditAdminInput!): Admin!
+    editEvent(input: EditEventInput!): Event!
 }
 
 
@@ -58,6 +60,11 @@ scalar PhoneNumber
     Sponsorship
   }
 
+  enum Duration {
+    DAILY
+    WEEKLY
+  }
+
   type TrackEvent {
     id: ID!
     userId: ID!
@@ -66,6 +73,7 @@ scalar PhoneNumber
     des: String
     approved: String!
     addedAt: DateTime!
+    event: Event!
   }
   
   input AddTrackEventsInput {
@@ -75,6 +83,14 @@ scalar PhoneNumber
     des: String
     addedAt: DateTime!
   }
+  input EditEventInput {
+    id: ID!
+    eventname: String
+    des: String
+    addedAt: DateTime
+    type: EventTypeEnum
+  }
+
   input ChangeTrackInput {
     eventId: ID!
     status: String!
@@ -82,12 +98,10 @@ scalar PhoneNumber
   }
   
   input AddEventsInput {
-    id: ID!
     eventname: String!
     type: EventTypeEnum!
     datetime: DateTime!
     des: String!
-    createdAt: DateTime!
   }
 
   interface UserTraits {
