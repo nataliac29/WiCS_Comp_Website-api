@@ -151,20 +151,16 @@ const editEvent = async (obj, { input }) => {
   //   }
   // }
 
-  if (type){
-    if (type === 'SmallSocial'){
+  if (type) {
+    if (type === 'SmallSocial') {
       updateObj.type = type
-    }
-    else if (type === 'LargeSocial'){
+    } else if (type === 'LargeSocial') {
       updateObj.type = type
-    }
-    else if (type === 'Educational'){
+    } else if (type === 'Educational') {
       updateObj.type = type
-    }
-    else if (type === 'Sponsorship'){
+    } else if (type === 'Sponsorship') {
       updateObj.type = type
-    }
-    else{
+    } else {
       throw new Error('Wrong event type')
     }
   }
