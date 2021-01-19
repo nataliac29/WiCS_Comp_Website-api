@@ -4,9 +4,8 @@ const { add } = require('date-fns')
 const Events = require('../../models/Events')
 const TrackEvents = require('../../models/TrackEvents')
 
-const event = async ({ eventId: e }, _params, { loaders: { eventLoader } }) => {
-  eventLoader.load(e)
-}
+const event = async ({ eventId: c }, _params, { loaders: { eventLoader } }) => eventLoader.load(c)
+
 const userEvents = async (obj, args, { user }) => {
   try {
     const e = await TrackEvents.query().select('eventId').where('userId', (user.id))

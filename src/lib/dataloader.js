@@ -1,5 +1,5 @@
 const DataLoader = require('dataloader')
-const TrackEvents = require('../models/TrackEvents')
+const Events = require('../models/Events')
 
 // Given a list of user ids, return an array of objects where each object at an
 // index in the array is associated to the the userId at the same index in the ids argument.
@@ -9,15 +9,15 @@ const TrackEvents = require('../models/TrackEvents')
 // batch function, simply replace find in the .then call to filter.
 
 const batchEvents = async ids => {
-  const users = await TrackEvents.query()
+  const users = await Events.query()
     .whereIn('id', ids).select()
     .then(rows => ids.map(id => rows.find(x => x.id === id)))
-
   return users
 }
 
 const generateLoaders = () => ({
   eventLoader: new DataLoader(batchEvents),
 })
+
 
 module.exports = { generateLoaders }
