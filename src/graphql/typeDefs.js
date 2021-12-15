@@ -47,7 +47,7 @@ scalar PhoneNumber
   type Event {
     id: ID!
     eventname: String!
-    type: EventTypeEnum!
+    type: String!
     datetime: DateTime!
     des: String!
     createdAt: DateTime!
@@ -93,7 +93,7 @@ scalar PhoneNumber
     eventname: String
     des: String
     datetime: DateTime
-    type: EventTypeEnum
+    type: String
   }
 
   input ChangeTrackInput {

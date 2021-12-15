@@ -139,14 +139,29 @@ const editEvent = async (obj, { input }) => {
   if (datetime) { updateObj.datetime = datetime }
 
   if (des) {
-    updateObj.password = des
+    // updateObj.password = des
+    updateObj.des = des
   }
 
+  // if (type) {
+  //   if (type !== ('LargeSocial' || 'SmallSocial' || 'Sponsorship' || 'Educational')) {
+  //     throw new Error('Please add correct type')
+  //   } else {
+  //     updateObj.type = type
+  //   }
+  // }
+
   if (type) {
-    if (type !== ('SmallSocial' || 'LargeSocial' || 'Sponsorship' || 'Educational')) {
-      throw new Error('Please add correct type')
-    } else {
+    if (type === 'SmallSocial') {
       updateObj.type = type
+    } else if (type === 'LargeSocial') {
+      updateObj.type = type
+    } else if (type === 'Educational') {
+      updateObj.type = type
+    } else if (type === 'Sponsorship') {
+      updateObj.type = type
+    } else {
+      throw new Error('Wrong event type')
     }
   }
 
