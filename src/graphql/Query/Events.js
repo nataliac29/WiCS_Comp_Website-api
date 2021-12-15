@@ -42,8 +42,8 @@ const allTrackEvents = async () => {
 //   return event
 // }
 const getEventsByDate = async (obj, { timeFrame, startDate }) => {
-  console.log(`start date: ${startDate}`)
-  console.log(`Time frame: ${timeFrame}`)
+  // console.log(`start date: ${startDate}`)
+  // console.log(`Time frame: ${timeFrame}`)
   try {
     if (timeFrame) {
       const inputAsDate = new Date(startDate)
