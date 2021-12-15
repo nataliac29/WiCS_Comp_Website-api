@@ -42,15 +42,26 @@ const allTrackEvents = async () => {
 //   return event
 // }
 const getEventsByDate = async (obj, { timeFrame, startDate }) => {
+  console.log(`start date: ${startDate}`)
+  console.log(`Time frame: ${timeFrame}`)
   try {
-    // console.log(Object.prototype.toString.call(startDate))
-    const input = startDate
-    const formattedStart = input.toISOString()
-    const formattedEnd = add(input, { days: timeFrame === 'DAILY' ? 1 : 7 }).toISOString()
+    if (timeFrame) {
+      const inputAsDate = new Date(startDate)
+      const date = `${inputAsDate.getFullYear()}-${inputAsDate.getMonth() + 1}-${inputAsDate.getDate()}`
 
-    const allEvents = Events.query()
-      .where('datetime', '>=', formattedStart)
-      .andWhere('datetime', '<=', formattedEnd)
+      const dateAsDate = new Date(date)
+
+      const formattedStart = dateAsDate.toISOString()
+
+      const formattedEnd = add(dateAsDate, { days: timeFrame === 'DAILY' ? 1 : 7 }).toISOString()
+
+      const filteredEvents = await Events.query()
+        .where('datetime', '>=', formattedStart)
+        .andWhere('datetime', '<=', formattedEnd)
+
+      return filteredEvents
+    }
+    const allEvents = await Events.query()
     return allEvents
   } catch (err) {
     throw new Error('Could not retrieve events')

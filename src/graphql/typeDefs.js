@@ -18,7 +18,7 @@ scalar PhoneNumber
     userTrackEvents: [TrackEvent!]
     getUserById(id: ID!): User!
     getAdminById(id: String!): Admin!
-    getEventsByDate(startDate: Date!, timeFrame: Duration!): [Event!]
+    getEventsByDate(startDate: DateTime, timeFrame: Duration): [Event!]
 
     #all submissions
     allTrackEvents: [TrackEvent!]
@@ -52,6 +52,10 @@ scalar PhoneNumber
     des: String!
     createdAt: DateTime!
   }
+  type BasicUser {
+    firstName: String!
+    lastName: String!
+  }
 
    enum EventTypeEnum {
     SmallSocial
@@ -74,6 +78,7 @@ scalar PhoneNumber
     approved: String!
     addedAt: DateTime!
     event: Event!
+    user: BasicUser!
   }
   
   input AddTrackEventsInput {

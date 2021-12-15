@@ -122,7 +122,7 @@ const addEvents = async (obj, { input }) => {
 
   const newEvent = await Events.query().insertAndFetch({
     eventname,
-    datetime,
+    datetime: datetime.toISOString(),
     des,
     type,
   })

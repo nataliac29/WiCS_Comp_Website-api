@@ -72,6 +72,7 @@ const userRegister = async (obj, {
     firstName,
     lastName,
     year,
+    progress: 0,
   })
 
   // If successful registration, set authentication information
